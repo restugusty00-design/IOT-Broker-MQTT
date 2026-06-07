@@ -1,0 +1,47 @@
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700;900&family=Rajdhani:wght@400;500;600;700&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --color-brand-orange: #FF6B00;
+  --color-brand-orange-dim: rgba(255, 107, 0, 0.2);
+  --color-brand-dark: #05070a;
+  --color-brand-panel: #11141b;
+  
+  --font-orbitron: 'Helvetica Neue', 'Orbitron', sans-serif;
+  --font-rajdhani: 'Helvetica Neue', 'Rajdhani', sans-serif;
+  --font-sans: 'Helvetica Neue', sans-serif;
+}
+
+body {
+  font-family: var(--font-sans);
+  background-color: var(--color-brand-dark);
+  color: #e2e8f0;
+}
+
+.font-orbitron {
+  font-family: var(--font-orbitron);
+}
+
+.glow-orange {
+  box-shadow: 0 0 10px var(--color-brand-orange), inset 0 0 5px var(--color-brand-orange);
+}
+
+.glow-text {
+  text-shadow: 0 0 8px var(--color-brand-orange);
+}
+
+/* Custom Scrollbar for Logs */
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(156, 163, 175, 0.3);
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-brand-orange);
+}
