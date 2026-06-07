@@ -71,8 +71,8 @@ export default function App() {
     m1.on('connect', () => {
       updateBrokerStatus('mosquitto1', { connected: true });
       addLog('Terhubung ke Mosquitto Public', 'info');
-      m1.subscribe('iot/sensor/suhu', { qos: 0 });
-      m1.subscribe('iot/sensor/kelembapan', { qos: 0 });
+      m1.subscribe('iot/restu_r7x2/sensor/suhu', { qos: 0 });
+      m1.subscribe('iot/restu_r7x2/sensor/kelembapan', { qos: 0 });
     });
     m1.on('disconnect', () => updateBrokerStatus('mosquitto1', { connected: false }));
     m1.on('error', (err) => {
@@ -102,7 +102,7 @@ export default function App() {
 
     const handleMessage = (topic: string, message: Buffer) => {
       const payload = message.toString();
-      if (topic === 'iot/sensor/suhu') {
+      if (topic === 'iot/restu_r7x2/sensor/suhu') {
         const val = parseFloat(payload);
         if (!isNaN(val)) {
           setTemperature(val);
@@ -115,7 +115,7 @@ export default function App() {
             playBeep();
           }
         }
-      } else if (topic === 'iot/sensor/kelembapan') {
+      } else if (topic === 'iot/restu_r7x2/sensor/kelembapan') {
         const val = parseFloat(payload);
         if (!isNaN(val)) {
           setHumidity(val);
@@ -213,14 +213,14 @@ export default function App() {
     const newState = [...relays];
     newState[idx] = state;
     setRelays(newState);
-    publishMulti(`iot/relay/${idx + 1}`, state ? 'ON' : 'OFF');
+    publishMulti(`iot/restu_r7x2/relay/${idx + 1}`, state ? 'ON' : 'OFF');
   };
 
   const publishPatternState = (idx: number, state: boolean) => {
     const newState = [...patterns];
     newState[idx] = state;
     setPatterns(newState);
-    publishMulti(`iot/pola/${idx + 1}`, state ? 'ON' : 'OFF');
+    publishMulti(`iot/restu_r7x2/pola/${idx + 1}`, state ? 'ON' : 'OFF');
   };
 
   const arePatternsActive = patterns.includes(true);
@@ -232,29 +232,29 @@ export default function App() {
     switch(cmd) {
       case 'ALL_RELAY_ON':
         setRelays([true, true, true, true]);
-        [1,2,3,4].forEach(i => publishMulti(`iot/relay/${i}`, 'ON'));
+        [1,2,3,4].forEach(i => publishMulti(`iot/restu_r7x2/relay/${i}`, 'ON'));
         speak('Semua relay dinyalakan');
         break;
       case 'ALL_RELAY_OFF':
         setRelays([false, false, false, false]);
-        [1,2,3,4].forEach(i => publishMulti(`iot/relay/${i}`, 'OFF'));
+        [1,2,3,4].forEach(i => publishMulti(`iot/restu_r7x2/relay/${i}`, 'OFF'));
         speak('Semua relay dimatikan');
         break;
       case 'SHUTDOWN':
         setRelays([false, false, false, false]);
         setPatterns([false, false]);
-        [1,2,3,4].forEach(i => publishMulti(`iot/relay/${i}`, 'OFF'));
-        [1,2].forEach(i => publishMulti(`iot/pola/${i}`, 'OFF'));
+        [1,2,3,4].forEach(i => publishMulti(`iot/restu_r7x2/relay/${i}`, 'OFF'));
+        [1,2].forEach(i => publishMulti(`iot/restu_r7x2/pola/${i}`, 'OFF'));
         speak('Semua perangkat dimatikan');
         break;
       case 'ALL_PATTERN_ON':
         setPatterns([true, true]);
-        [1,2].forEach(i => publishMulti(`iot/pola/${i}`, 'ON'));
+        [1,2].forEach(i => publishMulti(`iot/restu_r7x2/pola/${i}`, 'ON'));
         speak('Semua pola dinyalakan');
         break;
       case 'ALL_PATTERN_OFF':
         setPatterns([false, false]);
-        [1,2].forEach(i => publishMulti(`iot/pola/${i}`, 'OFF'));
+        [1,2].forEach(i => publishMulti(`iot/restu_r7x2/pola/${i}`, 'OFF'));
         speak('Semua pola dimatikan');
         break;
       case 'RELAY_1_ON': publishRelayState(0, true); speak(`Relay satu dinyalakan`); break;
@@ -303,7 +303,7 @@ export default function App() {
               onToggle={(idx) => publishRelayState(idx, !relays[idx])}
               onToggleAll={(state) => {
                 setRelays([state, state, state, state]);
-                [1,2,3,4].forEach(i => publishMulti(`iot/relay/${i}`, state ? 'ON' : 'OFF'));
+                [1,2,3,4].forEach(i => publishMulti(`iot/restu_r7x2/relay/${i}`, state ? 'ON' : 'OFF'));
               }}
               onRename={(idx, name) => {
                 const newNames = [...relayNames];
@@ -331,7 +331,7 @@ export default function App() {
               onToggle={(idx) => publishPatternState(idx, !patterns[idx])}
               onToggleAll={(state) => {
                 setPatterns([state, state]);
-                [1,2].forEach(i => publishMulti(`iot/pola/${i}`, state ? 'ON' : 'OFF'));
+                [1,2].forEach(i => publishMulti(`iot/restu_r7x2/pola/${i}`, state ? 'ON' : 'OFF'));
               }}
             />
           </div>
